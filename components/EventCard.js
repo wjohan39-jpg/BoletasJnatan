@@ -26,13 +26,32 @@ function formatPrice(price) {
   }).format(price);
 }
 
+function getUrgency(eventDate) {
+  const d = eventDate?.toDate ? eventDate.toDate() : new Date(eventDate);
+  const daysRemaining = Math.ceil((d.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+
+  if (daysRemaining <= 0) return { label: '¡Es hoy!', urgent: true };
+  if (daysRemaining === 1) return { label: '¡Es mañana!', urgent: true };
+  if (daysRemaining <= 3) return { label: '¡Últimos días!', urgent: true };
+  return { label: 'Próximo evento', urgent: false };
+}
+
 export default function EventCard({ event }) {
+  const urgency = getUrgency(event.eventDate);
   return (
     <div className="rounded-[26px] bg-gradient-to-br from-accent-purple via-accent-magenta to-accent-cyan p-[1.5px]">
       <div className="rounded-[24.5px] bg-cardInner px-5 py-6">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-cyan/15 px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-widest text-accent-cyan">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent-cyan shadow-[0_0_8px_theme(colors.accent.cyan)]" />
-          Próximo evento
+        <span
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-widest ${
+            urgency.urgent ? 'bg-orange-500/15 text-orange-400' : 'bg-accent-cyan/15 text-accent-cyan'
+          }`}
+        >
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              urgency.urgent ? 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.8)]' : 'bg-accent-cyan shadow-[0_0_8px_theme(colors.accent.cyan)]'
+            }`}
+          />
+          {urgency.label}
         </span>
 
         <h2 className="mt-3 font-display text-xl font-extrabold leading-tight text-text-primary">
