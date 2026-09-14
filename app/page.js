@@ -34,10 +34,27 @@ export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 pb-10 pt-8">
       <header className="mb-6">
-        <h1 className="bg-gradient-to-r from-accent-purple via-accent-magenta to-accent-cyan bg-clip-text font-display text-3xl font-extrabold leading-tight text-transparent">
-          {BUSINESS_NAME}
-        </h1>
-        <p className="mt-1.5 text-[11px] font-bold uppercase tracking-widest text-text-secondary">
+        <div className="flex items-center gap-2">
+          <h1 className="bg-gradient-to-r from-accent-purple via-accent-magenta to-accent-cyan bg-clip-text font-display text-3xl font-extrabold leading-tight text-transparent">
+            {BUSINESS_NAME}
+          </h1>
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            className="mt-1 flex-shrink-0 text-accent-magenta"
+            aria-label="Vendedor verificado"
+          >
+            <title>Vendedor verificado</title>
+            <circle cx="12" cy="12" r="10" fill="currentColor" />
+            <path d="M8 12.5l2.5 2.5L16 9.5" stroke="white" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <p className="mt-1.5 text-[11px] font-bold uppercase tracking-widest text-accent-magenta">
+          Vendedor verificado
+        </p>
+        <p className="mt-1 text-[11px] font-bold uppercase tracking-widest text-text-secondary">
           Compra tu boleta escaneando el QR
         </p>
         <div className="mt-4 h-0.5 bg-gradient-to-r from-accent-purple via-accent-magenta to-accent-cyan opacity-70" />
