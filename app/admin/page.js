@@ -75,7 +75,7 @@ export default function AdminPage() {
       <div className="mb-8 flex items-center justify-between border-b border-white/10 pb-5">
         <div className="flex items-center gap-3">
           <span className="bg-gradient-to-r from-accent-purple to-accent-cyan bg-clip-text font-display text-lg font-extrabold text-transparent">
-            Boletas [Nombre]
+            Boletas Jnatan
           </span>
           <span className="rounded-full bg-white/5 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-text-secondary">
             Panel Admin

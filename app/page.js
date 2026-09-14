@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { getUpcomingEvents } from '@/lib/events';
 import EventCard from '@/components/EventCard';
 
-const BUSINESS_NAME = 'Boletas [Nombre]';
+const BUSINESS_NAME = 'Boletas Jnatan';
 
 export default function HomePage() {
   const [events, setEvents] = useState([]);

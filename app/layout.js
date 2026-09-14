@@ -14,7 +14,7 @@ const manrope = Manrope({
 });
 
 export const metadata = {
-  title: 'Boletas [Nombre]',
+  title: 'Boletas Jnatan',
   description: 'Compra tu boleta escaneando el QR',
 };
 
