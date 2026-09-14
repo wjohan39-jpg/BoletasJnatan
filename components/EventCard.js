@@ -34,10 +34,11 @@ export default function EventCard({ event }) {
 
         <div className="mt-4 flex justify-center rounded-[20px] bg-white p-4 shadow-[0_18px_40px_-10px_rgba(176,38,255,0.55)]">
           <Image
-            src={event.qrImageUrl}
+            src={event.qrImageData}
             alt={`Código QR para comprar boletas de ${event.title}`}
             width={240}
             height={240}
+            unoptimized
             className="h-auto w-full max-w-[240px]"
           />
         </div>

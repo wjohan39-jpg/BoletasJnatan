@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
+import { readQrImageFile } from '@/lib/qrImage';
 
 function toDatetimeLocalValue(date) {
   if (!date) return '';
@@ -14,14 +16,28 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
   const [eventDate, setEventDate] = useState(toDatetimeLocalValue(initialEvent?.eventDate));
   const [location, setLocation] = useState(initialEvent?.location ?? '');
   const [price, setPrice] = useState(initialEvent?.price ?? '');
-  const [qrFile, setQrFile] = useState(null);
+  const [qrImageData, setQrImageData] = useState(initialEvent?.qrImageData ?? null);
+  const [qrError, setQrError] = useState('');
 
   const isEditing = Boolean(initialEvent);
 
+  async function handleFileChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setQrError('');
+    try {
+      const dataUrl = await readQrImageFile(file);
+      setQrImageData(dataUrl);
+    } catch (err) {
+      setQrError(err.message);
+      setQrImageData(null);
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    if (!isEditing && !qrFile) {
-      window.alert('Sube la imagen del QR.');
+    if (!qrImageData) {
+      setQrError('Sube la imagen del QR.');
       return;
     }
     await onSubmit({
@@ -29,13 +45,13 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
       eventDate: new Date(eventDate),
       location,
       price: Number(price),
-      qrFile,
+      qrImageData,
     });
     setTitle('');
     setEventDate('');
     setLocation('');
     setPrice('');
-    setQrFile(null);
+    setQrImageData(null);
   }
 
   return (
@@ -49,17 +65,29 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
 
       <form onSubmit={handleSubmit} className="mt-5 flex flex-col gap-3.5">
         <label className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-accent-cyan/40 bg-white/[0.02] px-4 py-6 text-center">
-          <span className="text-[12.5px] text-text-secondary">
-            {qrFile ? qrFile.name : 'Haz clic para subir la imagen del QR'}
+          {qrImageData ? (
+            <Image
+              src={qrImageData}
+              alt="Vista previa del QR"
+              width={96}
+              height={96}
+              unoptimized
+              className="h-24 w-24 rounded-lg bg-white object-contain p-1"
+            />
+          ) : (
+            <span className="text-[12.5px] text-text-secondary">Haz clic para subir la imagen del QR</span>
+          )}
+          <span className="text-[10.5px] text-text-secondary/60">
+            {qrImageData ? 'Haz clic para cambiarla' : 'PNG o JPG, menos de 600 KB'}
           </span>
-          <span className="text-[10.5px] text-text-secondary/60">PNG o JPG</span>
           <input
             type="file"
             accept="image/png,image/jpeg"
             className="hidden"
-            onChange={(e) => setQrFile(e.target.files?.[0] ?? null)}
+            onChange={handleFileChange}
           />
         </label>
+        {qrError && <p className="text-sm text-red-400">{qrError}</p>}
 
         <div>
           <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">

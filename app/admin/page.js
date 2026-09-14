@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { getAllEvents, createEvent, updateEvent, deleteEvent } from '@/lib/events';
-import { uploadQrImage, deleteQrImage } from '@/lib/qrImages';
 import LoginForm from '@/components/admin/LoginForm';
 import EventForm from '@/components/admin/EventForm';
 import EventList from '@/components/admin/EventList';
@@ -38,19 +37,13 @@ export default function AdminPage() {
     if (user) refreshEvents();
   }, [user, refreshEvents]);
 
-  async function handleSubmit({ title, eventDate, location, price, qrFile }) {
+  async function handleSubmit({ title, eventDate, location, price, qrImageData }) {
     setSubmitting(true);
     try {
       if (editingEvent) {
-        let { qrImageUrl, qrImagePath } = editingEvent;
-        if (qrFile) {
-          await deleteQrImage(editingEvent.qrImagePath);
-          ({ qrImageUrl, qrImagePath } = await uploadQrImage(qrFile));
-        }
-        await updateEvent(editingEvent.id, { title, eventDate, location, price, qrImageUrl, qrImagePath });
+        await updateEvent(editingEvent.id, { title, eventDate, location, price, qrImageData });
       } else {
-        const { qrImageUrl, qrImagePath } = await uploadQrImage(qrFile);
-        await createEvent({ title, eventDate, location, price, qrImageUrl, qrImagePath });
+        await createEvent({ title, eventDate, location, price, qrImageData });
       }
       setEditingEvent(null);
       await refreshEvents();
@@ -62,7 +55,6 @@ export default function AdminPage() {
   async function handleDelete(event) {
     if (!window.confirm(`¿Eliminar "${event.title}"? Esta acción no se puede deshacer.`)) return;
     await deleteEvent(event.id);
-    await deleteQrImage(event.qrImagePath);
     await refreshEvents();
   }
 

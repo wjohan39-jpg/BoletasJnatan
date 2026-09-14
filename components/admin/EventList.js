@@ -33,10 +33,11 @@ export default function EventList({ events, onEdit, onDelete }) {
             >
               <div className="flex min-w-0 items-center gap-3.5">
                 <Image
-                  src={event.qrImageUrl}
+                  src={event.qrImageData}
                   alt=""
                   width={44}
                   height={44}
+                  unoptimized
                   className="h-11 w-11 flex-shrink-0 rounded-lg bg-white object-contain p-0.5"
                 />
                 <div className="min-w-0">

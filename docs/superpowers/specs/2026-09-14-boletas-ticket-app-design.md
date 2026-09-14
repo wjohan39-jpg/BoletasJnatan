@@ -18,11 +18,24 @@ pruebas automatizadas o notificaciones).
 ## Stack
 
 - Next.js 14, App Router, JavaScript (no TypeScript)
-- Firebase: Firestore (datos de eventos), Storage (imágenes de QR),
-  Auth con email/password (un solo usuario admin)
+- Firebase: Firestore (datos de eventos **e imágenes de QR**), Auth con
+  email/password (un solo usuario admin) — sin Firebase Storage, ver
+  "Cambio de decisión" más abajo
 - Tailwind CSS
 - Despliegue en Vercel vía `git push`, sin configuración adicional más
   allá de variables de entorno
+
+## Cambio de decisión: QR en Firestore, no en Storage
+
+El plan original guardaba el QR en Firebase Storage. Durante la
+implementación, Firebase empezó a exigir una cuenta de facturación
+(plan Blaze, con tarjeta registrada) para habilitar Storage, incluso
+para uso dentro de la capa gratuita. Para no obligar al vendedor a dar
+una tarjeta de crédito, el QR se guarda en su lugar como texto
+(base64) directo en el campo `qrImageData` del documento del evento en
+Firestore — ver "Modelo de datos". Esto mantiene todo dentro de la
+capa 100% gratuita de Firebase (Spark), a costa de un límite de tamaño
+de imagen (ver esa sección).
 
 ## Arquitectura
 
@@ -32,17 +45,18 @@ Firebase JS SDK), sin Firebase Admin SDK ni rutas de API:
 - La página pública lee `events` directamente desde Firestore (lectura
   pública permitida por las reglas).
 - El panel admin usa Firebase Auth (client SDK) para iniciar sesión, y
-  con la sesión activa escribe directamente a Firestore/Storage (las
-  reglas exigen `request.auth != null` para escribir).
+  con la sesión activa escribe directamente a Firestore (las reglas
+  exigen `request.auth != null` para escribir).
 
 Esto es suficiente porque solo hay un admin y las reglas de seguridad
-de Firestore/Storage ya hacen el trabajo de autorización — no se
-necesita una capa de backend adicional.
+de Firestore ya hacen el trabajo de autorización — no se necesita una
+capa de backend adicional.
 
 Un módulo `lib/firebase.js` inicializa la app de Firebase leyendo las
-variables `NEXT_PUBLIC_FIREBASE_*`. `next.config.js` debe permitir el
-dominio de Firebase Storage en `images.remotePatterns` para usar
-`next/image`.
+variables `NEXT_PUBLIC_FIREBASE_*`. `lib/qrImage.js` convierte el
+archivo de imagen elegido en el navegador a un data URI base64
+(`FileReader.readAsDataURL`), rechazando archivos de más de 600 KB
+antes de intentar guardarlos.
 
 ## Modelo de datos (Firestore, colección `events`)
 
@@ -52,11 +66,15 @@ dominio de Firebase Storage en `images.remotePatterns` para usar
   eventDate: timestamp,
   location: string,
   price: number,
-  qrImageUrl: string,   // URL pública de Storage
-  qrImagePath: string,  // path en Storage, para poder borrarla
+  qrImageData: string,  // data URI base64 de la imagen del QR
   createdAt: timestamp
 }
 ```
+
+Firestore limita cada documento a 1 MB. `lib/qrImage.js` rechaza
+archivos de más de 600 KB antes de codificarlos (base64 infla el
+tamaño ~33%), dejando margen de sobra para el resto de los campos. Un
+QR típico (PNG que comparte el proveedor) pesa muy por debajo de eso.
 
 ## Vistas
 
@@ -80,15 +98,17 @@ dominio de Firebase Storage en `images.remotePatterns` para usar
   muestra el formulario de login (email + contraseña), nunca el
   dashboard.
 - Con sesión activa:
-  - Formulario "Publicar nuevo evento": sube imagen del QR a Storage,
-    más nombre, fecha, lugar y precio; crea el documento en Firestore.
+  - Formulario "Publicar nuevo evento": convierte la imagen del QR a
+    base64 en el navegador, más nombre, fecha, lugar y precio; crea el
+    documento en Firestore con todo incluido.
   - Lista de todos los eventos (pasados y futuros), pasados mostrados
     visualmente atenuados con badge "Pasado" vs. "Activo".
-  - Editar: mismo formulario, precargado. El admin puede reemplazar la
-    imagen del QR (se borra el archivo anterior de Storage y se sube
-    el nuevo) o dejarla igual.
+  - Editar: mismo formulario, precargado (incluida una vista previa
+    del QR actual). El admin puede reemplazar la imagen del QR o
+    dejarla igual — al reemplazarla simplemente se sobrescribe el
+    campo `qrImageData`, no hay un archivo aparte que borrar.
   - Eliminar: confirmación simple antes de borrar el documento de
-    Firestore y el archivo de Storage asociado.
+    Firestore (el QR se va con él, al estar en el mismo documento).
   - Botón de cerrar sesión.
 
 ## Diseño visual
@@ -116,25 +136,21 @@ nocturna, mobile-first, alto contraste, QR como elemento dominante:
 ## Reglas de seguridad
 
 `firestore.rules`: lectura pública de `events`, escritura solo si
-`request.auth != null`.
+`request.auth != null`. Esto ya cubre el QR, al vivir dentro del mismo
+documento — no hay reglas de Storage que mantener.
 
-`storage.rules`: lectura pública de las imágenes, escritura solo si
-`request.auth != null`.
-
-Ambos archivos se entregan listos para pegar en la consola de
-Firebase.
+Se entrega listo para pegar en la consola de Firebase.
 
 ## Variables de entorno
 
 `NEXT_PUBLIC_FIREBASE_*` (apiKey, authDomain, projectId,
-storageBucket, messagingSenderId, appId) — sin credenciales
-hardcodeadas en el código. Se entrega `.env.local.example` con las
-claves vacías.
+messagingSenderId, appId) — sin credenciales hardcodeadas en el
+código. Se entrega `.env.local.example` con las claves vacías.
 
 ## Entregables
 
 - Proyecto Next.js funcional, corriendo en local con `npm run dev`.
 - `README.md` con pasos para: crear el proyecto en Firebase Console
-  (Firestore, Storage, Auth email/password); crear el usuario admin;
-  pegar las reglas de seguridad; llenar `.env.local`; subir el repo a
-  GitHub y conectarlo en Vercel con las mismas variables de entorno.
+  (Firestore, Auth email/password); crear el usuario admin; pegar las
+  reglas de seguridad; llenar `.env.local`; subir el repo a GitHub y
+  conectarlo en Vercel con las mismas variables de entorno.
