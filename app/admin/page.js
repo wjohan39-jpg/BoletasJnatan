@@ -16,7 +16,13 @@ export default function AdminPage() {
   const [submitting, setSubmitting] = useState(false);
   const [listError, setListError] = useState(false);
 
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
+  useEffect(() => {
+    if (!auth) {
+      setUser(null);
+      return;
+    }
+    return onAuthStateChanged(auth, setUser);
+  }, []);
 
   const refreshEvents = useCallback(async () => {
     try {
