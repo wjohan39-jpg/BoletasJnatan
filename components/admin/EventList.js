@@ -16,7 +16,7 @@ function isPast(date) {
   return d.getTime() < Date.now();
 }
 
-export default function EventList({ events, onEdit, onDelete }) {
+export default function EventList({ events, onEdit, onDelete, onToggleSoldOut }) {
   return (
     <div>
       <h2 className="font-display text-lg font-bold text-text-primary">Eventos</h2>
@@ -29,7 +29,7 @@ export default function EventList({ events, onEdit, onDelete }) {
           return (
             <div
               key={event.id}
-              className={`flex flex-col gap-3 rounded-2xl border border-white/10 bg-card px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${past ? 'opacity-55' : ''}`}
+              className={`flex flex-col gap-3 rounded-2xl border border-white/10 bg-card px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${past || event.soldOut ? 'opacity-55' : ''}`}
             >
               <div className="flex min-w-0 items-center gap-3.5">
                 <Image
@@ -60,6 +60,17 @@ export default function EventList({ events, onEdit, onDelete }) {
                 <span className="flex-shrink-0 font-display text-sm font-bold text-text-primary">
                   {formatPrice(event.price)}
                 </span>
+
+                <button
+                  onClick={() => onToggleSoldOut(event)}
+                  className={`flex-shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide ${
+                    event.soldOut
+                      ? 'border-orange-400/40 bg-orange-500/15 text-orange-400'
+                      : 'border-white/15 text-text-secondary'
+                  }`}
+                >
+                  {event.soldOut ? 'Agotado' : 'Marcar agotado'}
+                </button>
 
                 <div className="flex flex-shrink-0 gap-2">
                   <button

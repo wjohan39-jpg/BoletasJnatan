@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { getAllEvents, createEvent, updateEvent, deleteEvent } from '@/lib/events';
+import { getAllEvents, createEvent, updateEvent, deleteEvent, setSoldOut } from '@/lib/events';
 import LoginForm from '@/components/admin/LoginForm';
 import EventForm from '@/components/admin/EventForm';
 import EventList from '@/components/admin/EventList';
@@ -58,6 +58,11 @@ export default function AdminPage() {
     await refreshEvents();
   }
 
+  async function handleToggleSoldOut(event) {
+    await setSoldOut(event.id, !event.soldOut);
+    await refreshEvents();
+  }
+
   if (user === undefined) {
     return (
       <main className="flex min-h-screen items-center justify-center">
@@ -100,7 +105,12 @@ export default function AdminPage() {
         {listError ? (
           <p className="text-sm text-text-secondary">No se pudo cargar la lista de eventos.</p>
         ) : (
-          <EventList events={events} onEdit={setEditingEvent} onDelete={handleDelete} />
+          <EventList
+            events={events}
+            onEdit={setEditingEvent}
+            onDelete={handleDelete}
+            onToggleSoldOut={handleToggleSoldOut}
+          />
         )}
       </div>
     </main>
