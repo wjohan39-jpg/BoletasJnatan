@@ -4,17 +4,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        bg: '#0a0a0f',
-        card: '#14121c',
-        cardInner: '#120f19',
+        bg: '#05070d',
+        card: '#0d131f',
+        cardInner: '#0a0f18',
+        // Token names (purple/magenta/cyan) predate this palette — they now
+        // hold a deep-to-bright blue ramp (black/blue/white brief) instead
+        // of the original violet/magenta/cyan triad. Kept as-is rather than
+        // renamed across every component to keep this a low-risk swap.
         accent: {
-          purple: '#b026ff',
-          magenta: '#ff2ec4',
-          cyan: '#21e6e6',
+          purple: '#0b3cff',
+          magenta: '#2f7cff',
+          cyan: '#6fd8ff',
         },
         text: {
-          primary: '#f6f3f9',
-          secondary: '#8b8399',
+          primary: '#f4f7fc',
+          secondary: '#8b93a6',
         },
       },
       fontFamily: {

@@ -32,7 +32,7 @@ export default function EventCard({ event }) {
           {event.title}
         </h2>
 
-        <div className="mt-4 flex justify-center rounded-[20px] bg-white p-4 shadow-[0_18px_40px_-10px_rgba(176,38,255,0.55)]">
+        <div className="mt-4 flex justify-center rounded-[20px] bg-white p-4 shadow-[0_18px_40px_-10px_rgba(11,60,255,0.55)]">
           <Image
             src={event.qrImageData}
             alt={`Código QR para comprar boletas de ${event.title}`}
