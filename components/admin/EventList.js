@@ -29,7 +29,7 @@ export default function EventList({ events, onEdit, onDelete }) {
           return (
             <div
               key={event.id}
-              className={`flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-card px-4 py-3.5 ${past ? 'opacity-55' : ''}`}
+              className={`flex flex-col gap-3 rounded-2xl border border-white/10 bg-card px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${past ? 'opacity-55' : ''}`}
             >
               <div className="flex min-w-0 items-center gap-3.5">
                 <Image
@@ -48,40 +48,42 @@ export default function EventList({ events, onEdit, onDelete }) {
                 </div>
               </div>
 
-              <span
-                className={`flex-shrink-0 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide ${
-                  past ? 'bg-white/5 text-text-secondary' : 'bg-accent-cyan/15 text-accent-cyan'
-                }`}
-              >
-                {past ? 'Pasado' : 'Activo'}
-              </span>
-
-              <span className="flex-shrink-0 font-display text-sm font-bold text-text-primary">
-                {formatPrice(event.price)}
-              </span>
-
-              <div className="flex flex-shrink-0 gap-2">
-                <button
-                  onClick={() => onEdit(event)}
-                  aria-label="Editar"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-text-primary"
+              <div className="flex items-center justify-between gap-3 sm:justify-end sm:gap-4">
+                <span
+                  className={`flex-shrink-0 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide ${
+                    past ? 'bg-white/5 text-text-secondary' : 'bg-accent-cyan/15 text-accent-cyan'
+                  }`}
                 >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 20h9" />
-                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => onDelete(event)}
-                  aria-label="Eliminar"
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-red-400"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 6h18" />
-                    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                  </svg>
-                </button>
+                  {past ? 'Pasado' : 'Activo'}
+                </span>
+
+                <span className="flex-shrink-0 font-display text-sm font-bold text-text-primary">
+                  {formatPrice(event.price)}
+                </span>
+
+                <div className="flex flex-shrink-0 gap-2">
+                  <button
+                    onClick={() => onEdit(event)}
+                    aria-label="Editar"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-text-primary"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => onDelete(event)}
+                    aria-label="Eliminar"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-red-400"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M3 6h18" />
+                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           );

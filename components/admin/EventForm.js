@@ -102,31 +102,30 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">
-              Fecha
-            </p>
-            <input
-              type="datetime-local"
-              required
-              value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
-            />
-          </div>
-          <div>
-            <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">
-              Lugar
-            </p>
-            <input
-              required
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              placeholder="Explanada GNP"
-              className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
-            />
-          </div>
+        <div>
+          <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">
+            Fecha y hora
+          </p>
+          <input
+            type="datetime-local"
+            required
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+            className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
+          />
+        </div>
+
+        <div>
+          <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">
+            Lugar
+          </p>
+          <input
+            required
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Explanada GNP"
+            className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
+          />
         </div>
 
         <div>
