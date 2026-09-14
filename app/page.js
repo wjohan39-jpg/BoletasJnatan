@@ -36,7 +36,7 @@ export default function HomePage() {
     <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 pb-10 pt-8">
       <header className="mb-6">
         <div className="flex items-center gap-2">
-          <h1 className="bg-gradient-to-r from-accent-purple via-accent-magenta to-accent-cyan bg-clip-text font-display text-3xl font-extrabold leading-tight text-transparent">
+          <h1 className="animate-gradient-flow bg-[length:200%_auto] bg-gradient-to-r from-accent-purple via-accent-magenta to-accent-cyan bg-clip-text font-display text-3xl font-extrabold leading-tight text-transparent">
             {BUSINESS_NAME}
           </h1>
           <svg

@@ -25,6 +25,20 @@ module.exports = {
         display: ['var(--font-unbounded)', 'sans-serif'],
         body: ['var(--font-manrope)', 'sans-serif'],
       },
+      keyframes: {
+        'gradient-flow': {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+        'rise-glow': {
+          '0%, 100%': { transform: 'translateY(35%)', opacity: '0.55' },
+          '50%': { transform: 'translateY(-45%)', opacity: '0.95' },
+        },
+      },
+      animation: {
+        'gradient-flow': 'gradient-flow 4s ease-in-out infinite',
+        'rise-glow': 'rise-glow 3.5s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
