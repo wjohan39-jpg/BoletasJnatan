@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 
 const WHATSAPP_NUMBER = '573057860229';
@@ -7,32 +5,6 @@ const WHATSAPP_NUMBER = '573057860229';
 function whatsappLink(title) {
   const message = `Hola! Quiero comprar mi boleta para ${title}`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-}
-
-async function handleShare(event) {
-  const url = `${window.location.origin}/evento/${event.id}`;
-  const shareData = {
-    title: event.title,
-    text: `¡Mira este evento! ${event.title} — ${event.location}`,
-    url,
-  };
-
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-    } catch {
-      // Cancelled or failed silently — nothing to do.
-    }
-    return;
-  }
-
-  if (navigator.clipboard) {
-    await navigator.clipboard.writeText(url);
-    window.alert('Link copiado al portapapeles');
-    return;
-  }
-
-  window.prompt('Copia este link para compartir el evento:', url);
 }
 
 function formatDate(date) {
@@ -74,42 +46,26 @@ export default function EventCard({ event }) {
       }`}
     >
       <div className="rounded-[24.5px] bg-cardInner px-5 py-6">
-        <div className="flex items-center justify-between gap-2">
+        <span
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-widest ${
+            soldOut
+              ? 'bg-white/10 text-text-secondary'
+              : urgency.urgent
+                ? 'bg-orange-500/15 text-orange-400'
+                : 'bg-accent-cyan/15 text-accent-cyan'
+          }`}
+        >
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10.5px] font-extrabold uppercase tracking-widest ${
+            className={`h-1.5 w-1.5 rounded-full ${
               soldOut
-                ? 'bg-white/10 text-text-secondary'
+                ? 'bg-text-secondary'
                 : urgency.urgent
-                  ? 'bg-orange-500/15 text-orange-400'
-                  : 'bg-accent-cyan/15 text-accent-cyan'
+                  ? 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.8)]'
+                  : 'bg-accent-cyan shadow-[0_0_8px_theme(colors.accent.cyan)]'
             }`}
-          >
-            <span
-              className={`h-1.5 w-1.5 rounded-full ${
-                soldOut
-                  ? 'bg-text-secondary'
-                  : urgency.urgent
-                    ? 'bg-orange-400 shadow-[0_0_8px_rgba(251,146,60,0.8)]'
-                    : 'bg-accent-cyan shadow-[0_0_8px_theme(colors.accent.cyan)]'
-              }`}
-            />
-            {soldOut ? 'Agotado' : urgency.label}
-          </span>
-
-          <button
-            onClick={() => handleShare(event)}
-            aria-label="Compartir este evento"
-            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-text-secondary"
-          >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="18" cy="5" r="3" />
-              <circle cx="6" cy="12" r="3" />
-              <circle cx="18" cy="19" r="3" />
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-            </svg>
-          </button>
-        </div>
+          />
+          {soldOut ? 'Agotado' : urgency.label}
+        </span>
 
         <h2 className="mt-3 font-display text-xl font-extrabold leading-tight text-text-primary">
           {event.title}
