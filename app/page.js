@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { getUpcomingEvents } from '@/lib/events';
 import EventCard from '@/components/EventCard';
 
@@ -96,6 +97,9 @@ export default function HomePage() {
         <p className="text-[11.5px] text-text-secondary/70">
           © {new Date().getFullYear()} {BUSINESS_NAME}. Todos los derechos reservados.
         </p>
+        <Link href="/admin" className="text-[10px] text-text-secondary/40">
+          Admin
+        </Link>
       </footer>
     </main>
   );
