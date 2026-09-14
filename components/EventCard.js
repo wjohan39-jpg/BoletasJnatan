@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 function formatDate(date) {
   const d = date?.toDate ? date.toDate() : new Date(date);
-  return new Intl.DateTimeFormat('es-MX', {
+  return new Intl.DateTimeFormat('es-CO', {
     weekday: 'short',
     day: '2-digit',
     month: 'short',
@@ -12,9 +12,9 @@ function formatDate(date) {
 }
 
 function formatPrice(price) {
-  return new Intl.NumberFormat('es-MX', {
+  return new Intl.NumberFormat('es-CO', {
     style: 'currency',
-    currency: 'MXN',
+    currency: 'COP',
     maximumFractionDigits: 0,
   }).format(price);
 }

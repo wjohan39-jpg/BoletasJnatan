@@ -131,7 +131,7 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
 
         <div>
           <p className="mb-1.5 text-[10.5px] font-extrabold uppercase tracking-wide text-text-secondary">
-            Precio (MXN)
+            Precio (COP)
           </p>
           <input
             type="number"
@@ -140,7 +140,7 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
             step="1"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            placeholder="1450"
+            placeholder="150000"
             className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
           />
         </div>
