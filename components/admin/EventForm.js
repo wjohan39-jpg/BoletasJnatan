@@ -123,7 +123,7 @@ export default function EventForm({ initialEvent, submitting, onSubmit, onCancel
             required
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Explanada GNP"
+            placeholder="Digita la ubicación"
             className="w-full rounded-lg border border-white/10 bg-white/[0.045] px-3.5 py-2.5 text-sm text-text-primary outline-none focus:border-accent-cyan"
           />
         </div>

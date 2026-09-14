@@ -71,26 +71,28 @@ export default function EventCard({ event }) {
           {event.title}
         </h2>
 
-        <div className="relative mt-4 overflow-hidden rounded-[20px] pb-2">
-          {!soldOut && (
-            <div className="pointer-events-none absolute inset-x-10 bottom-0 -z-10 h-28 animate-rise-glow rounded-full bg-gradient-to-t from-accent-magenta via-accent-cyan to-transparent opacity-70 blur-2xl" />
-          )}
-          <div className="relative flex justify-center rounded-[20px] bg-white p-4 shadow-[0_18px_40px_-10px_rgba(11,60,255,0.55)]">
-            <Image
-              src={event.qrImageData}
-              alt={`Código QR para comprar boletas de ${event.title}`}
-              width={240}
-              height={240}
-              unoptimized
-              className={`h-auto w-full max-w-[240px] ${soldOut ? 'opacity-30 grayscale' : ''}`}
-            />
-            {soldOut && (
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="-rotate-6 rounded-lg border-2 border-text-secondary px-4 py-1.5 text-lg font-extrabold uppercase tracking-widest text-text-secondary">
-                  Agotado
-                </span>
-              </span>
+        <div className="mt-4 flex justify-center">
+          <div className="relative">
+            {!soldOut && (
+              <div className="pointer-events-none absolute -inset-x-5 -bottom-5 -z-10 h-32 animate-rise-glow rounded-full bg-gradient-to-t from-accent-magenta via-accent-cyan to-transparent opacity-90 blur-xl" />
             )}
+            <div className="relative rounded-[20px] bg-white p-4 shadow-[0_18px_40px_-10px_rgba(11,60,255,0.55)]">
+              <Image
+                src={event.qrImageData}
+                alt={`Código QR para comprar boletas de ${event.title}`}
+                width={240}
+                height={240}
+                unoptimized
+                className={`h-auto w-[240px] max-w-full ${soldOut ? 'opacity-30 grayscale' : ''}`}
+              />
+              {soldOut && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <span className="-rotate-6 rounded-lg border-2 border-text-secondary px-4 py-1.5 text-lg font-extrabold uppercase tracking-widest text-text-secondary">
+                    Agotado
+                  </span>
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
